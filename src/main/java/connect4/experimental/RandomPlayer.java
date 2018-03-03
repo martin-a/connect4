@@ -7,6 +7,9 @@ import connect4.Result;
 
 import java.util.Random;
 
+/**
+ * A bot selecting random valid moves
+ */
 public class RandomPlayer implements Player {
     private final Random random;
     private final MoveValidator moveValidator;

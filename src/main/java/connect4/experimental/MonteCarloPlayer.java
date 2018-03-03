@@ -4,6 +4,9 @@ import connect4.*;
 
 import java.util.Random;
 
+/**
+ * A simple AI using Monte Carlo rollouts. (This is not a MCTS implementation)
+ */
 public class MonteCarloPlayer implements Player {
     private final GameRunner gameRunner;
     private final Random random;
@@ -52,7 +55,11 @@ public class MonteCarloPlayer implements Player {
         return weight;
     }
 
+    /**
+     * play game until the end from current state
+     */
     private Result doRollout(int selectedColumn, Color[][] table) {
+        //Clone the table (we do not want to alter current game table)
         Color[][] clone = new Color[table.length][];
         for (int i = 0; i < table.length; i++) {
             clone[i] = table[i].clone();
@@ -61,6 +68,8 @@ public class MonteCarloPlayer implements Player {
         if (result != Result.CONTINUE) {
             return result;
         }
+
+        // resume game using cloned table
         RandomPlayer red = new RandomPlayer(random, ruleManager);
         RandomPlayer green = new RandomPlayer(random, ruleManager);
         gameRunner.resume(red, green, clone);
