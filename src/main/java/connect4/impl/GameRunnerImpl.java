@@ -20,15 +20,17 @@ class GameRunnerImpl implements GameRunner {
     public void resume(Player redPlayer, Player greenPlayer, Color[][] table) {
         Color turn = getTurnColor(table);
         Result result;
+        Player currentPlayer;
         do {
-            Player currentPlayer = turn == Color.GREEN ? greenPlayer : redPlayer;
-            Player otherPlayer = turn == Color.RED ? greenPlayer : redPlayer;
+            currentPlayer = turn == Color.GREEN ? greenPlayer : redPlayer;
             int column = currentPlayer.chooseColumn(table);
             result = ruleManager.updateTable(table, turn, column);
             turn = turn == Color.GREEN ? Color.RED : Color.GREEN;
-            currentPlayer.notifyGameEnd(result, table);
-            otherPlayer.notifyGameEnd(result.oppositeResult(), table);
         } while (result == Result.CONTINUE);
+
+        currentPlayer.notifyGameEnd(result, table);
+        Player otherPlayer = currentPlayer == redPlayer ? greenPlayer : redPlayer;
+        otherPlayer.notifyGameEnd(result.oppositeResult(), table);
 
     }
 

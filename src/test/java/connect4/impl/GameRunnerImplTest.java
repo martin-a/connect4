@@ -22,10 +22,10 @@ public class GameRunnerImplTest {
     @Mock
     private RuleManager ruleManager;
     private GameRunnerImpl gameRunner;
-    public Color[][] table;
+    private Color[][] table;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         table = new Color[2][2];
@@ -52,6 +52,8 @@ public class GameRunnerImplTest {
         inOrder.verify(redP).notifyGameStart(Color.RED);
         inOrder.verify(greenP).notifyGameStart(Color.GREEN);
 
+        inOrder.verify(ruleManager).newTable();
+
         //red always starts
         inOrder.verify(redP).chooseColumn(table);
         inOrder.verify(ruleManager).updateTable(table, Color.RED, 0);
@@ -61,6 +63,8 @@ public class GameRunnerImplTest {
         inOrder.verify(ruleManager).updateTable(table, Color.RED, 0);
         inOrder.verify(redP).notifyGameEnd(Result.WIN, table);
         inOrder.verify(greenP).notifyGameEnd(Result.LOST, table);
+
+        verifyNoMoreInteractions(redP, greenP, ruleManager);
     }
 
 
@@ -75,6 +79,8 @@ public class GameRunnerImplTest {
         inOrder.verify(redP).notifyGameStart(Color.RED);
         inOrder.verify(greenP).notifyGameStart(Color.GREEN);
 
+        inOrder.verify(ruleManager).newTable();
+
         //red always starts
         inOrder.verify(redP).chooseColumn(table);
         inOrder.verify(ruleManager).updateTable(table, Color.RED, 0);
@@ -84,7 +90,8 @@ public class GameRunnerImplTest {
         inOrder.verify(ruleManager).updateTable(table, Color.RED, 0);
         inOrder.verify(redP).notifyGameEnd(Result.DRAW, table);
         inOrder.verify(greenP).notifyGameEnd(Result.DRAW, table);
-        inOrder.verifyNoMoreInteractions();
+
+        verifyNoMoreInteractions(redP, greenP, ruleManager);
     }
 
     @Test
